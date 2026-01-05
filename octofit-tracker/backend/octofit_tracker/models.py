@@ -6,10 +6,10 @@ class Team(models.Model):
 class User(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members')
+    team = models.CharField(max_length=100)  # Team-Name als Referenz
 
 class Activity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
+    user_email = models.EmailField()  # User-Email als Referenz
     type = models.CharField(max_length=100)
     duration = models.IntegerField()  # Minuten
     date = models.DateField()
@@ -17,8 +17,8 @@ class Activity(models.Model):
 class Workout(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    suggested_for = models.ManyToManyField(User, related_name='suggested_workouts')
+    suggested_for = models.JSONField(default=list)  # Liste von User-Emails
 
 class Leaderboard(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='leaderboard_entries')
+    team = models.CharField(max_length=100)  # Team-Name als Referenz
     points = models.IntegerField()
